@@ -7,16 +7,16 @@
 ## Types of Cloud Computing
 
 ### Infrastructure as a Service (IaaS)
-> Provides networking computers, data storage
-> Highest level of flexibility
-> Easily parallel with traditional infrastructure.
+Provides networking computers, data storage
+Highest level of flexibility
+Easily parallel with traditional infrastructure.
 
 ### Platform as a Service (PaaS)
-> Don't need to manage infrastructure.
-> Focus on deployment and management of app
+Don't need to manage infrastructure.
+Focus on deployment and management of app
 
 ### Software as a Service (SaaS)
-> Complete product that is run and managed by service provider
+Complete product that is run and managed by service provider
 
 # IAM 
 
@@ -28,7 +28,7 @@ Users don't belong to a group can be in different groups
 Users and groups can be assigned JSON documents called policies
 These policies define permissions to users
 Use least privilige principle: 
-> Don't give more permissions than a person needed
+- Don't give more permissions than a person needed
 
 Inline Policy: A policy that attach to a user only
 
@@ -72,7 +72,7 @@ Hardware Key Fab MFA Device for AWS GovCloud
 ## How can users access AWS?
 
 There is 3 ways to access AWS Services:
-> AWS MAnagement Console
+> AWS Management Console
 AWS CLI
 AWS SDK
 
@@ -82,9 +82,9 @@ Language specific API's (set of libraries)
 Enables you to access AWS Services programmatically
 Embedded within your application
 Supports:
-> SDK's (Java, Python, Go, Nodejs)
-Mobile SDK's (Android, IOS, ...)
-IoT Device SDK's (Embedded c, Arduino, ...)
+- SDK's (Java, Python, Go, Nodejs)
+- Mobile SDK's (Android, IOS, ...)
+- IoT Device SDK's (Embedded c, Arduino, ...)
 
 Example: AWS CLI is a program built in AWS Python SDK.
 #### For CLI and SDK access you must configure a secret key. 
@@ -96,18 +96,18 @@ Some AWS services will need to perform actions on your behalf(As your permission
 To do so, we will assign permissions to AWS Services with IAM Roles
 IAM Roles will be given to services not users
 Common Roles:
-> EC2 Instance Roles
-Lambda Function Roles
-Roles for Cloud Formation
+- EC2 Instance Roles
+- Lambda Function Roles
+- Roles for Cloud Formation
 
 ## IAM Security Tools
 
 IAM Credential Report(account level):
-> a report that lists all your accounts users and the staatus of their various credentials
+- A report that lists all your accounts users and the staatus of their various credentials
 
 IAM Access Advisor 
-> Shows the service permission granted to a user and when those services last accessed
-You can use this information to revise your policies.
+- Shows the service permission granted to a user and when those services last accessed
+- You can use this information to revise your policies.
 
 ## IAM Best Practices
 
@@ -147,10 +147,10 @@ Audit: IAM Credentials Report and IAM Access Advisor
 
 EC2: Infrastructure as a Service
 Ity mainly consists in the capability of:
-> Renting virtual Machines (EC2)
-Storing data and Vitual MAchines (EBS)
-Disturbuting Load Accross Machines (ELB)
-Scaling the services with auto scaling group(ASG)
+- Renting virtual Machines (EC2)
+- Storing data and Vitual MAchines (EBS)
+- Disturbuting Load Accross Machines (ELB)
+- Scaling the services with auto scaling group(ASG)
 
 #### Knowing EC2 is fundemental to understand how cloud works.
 
@@ -160,9 +160,9 @@ It is possible bootstrap our instances using EC2 User Data Script.
 Bootstraping means launching commands when machine starts
 The script only run once at instance first start 
 EC2 User Data Automates:
-> Installing Updates
-Installing Software 
-Downloading Common Files
+- Installing Updates
+- Installing Software 
+- Downloading Common Files
 
 EC2 User Data Runs as Root User 
 
@@ -181,7 +181,7 @@ There are 8 class of them
 7. Instance Features
 8. Measuring Instance Performance
 
-* m5.2xlarge
+- m5.2xlarge
 > m: Instance class
 5: Instance generation 
 2xlarge: size within the instance class 
@@ -190,36 +190,36 @@ There are 8 class of them
 
 Great for diversity of workloads such as web servers or code repositories
 Balance between: 
-> Compute 
-Memory
-Networking
+- Compute 
+- Memory
+- Networking
 
 2. Compute Optimized
 
 Great for compute intensive tasks that require high performance processor such as: 
->Batch Processing workloads
-Media Trasnscoding
-High Performance Web Servers
-High :Performance Computing (HPC)
-Scientific Modelling and Machine Learning
-Dedicated Gaming Servers
+- Batch Processing workloads
+- Media Trasnscoding
+- High Performance Web Servers
+- High :Performance Computing (HPC)
+- Scientific Modelling and Machine Learning
+- Dedicated Gaming Servers
 
 3. Memory Optimized
 
 Fast Performance Workloads that process large data sets in memory:
->High Performance relational and non relational databases
-Distrubuted web scale cache stores
-In-Memory Databases optimized for BI(Bussiness Inteligence)
-Application performing real-time processing of big unstructured data 
+- High Performance relational and non relational databases
+- Distrubuted web scale cache stores
+- In-Memory Databases optimized for BI(Bussiness Inteligence)
+- Application performing real-time processing of big unstructured data 
 
 4. Storage Optimized
 
 Great for storage-insentive tasks that require high, sequential, read and write access to large data sets on local storage.
->High Frequency Online Transaction Processing(OLTP) systems
-Relational or No-SQL Databases
-Cache for in memory databases
-Data Warehousing Applications
-Distrubuted File Systems
+- High Frequency Online Transaction Processing(OLTP) systems
+- Relational or No-SQL Databases
+- Cache for in memory databases
+- Data Warehousing Applications
+- Distrubuted File Systems
 
 ## Security Groups 
 
@@ -234,10 +234,10 @@ Outbound Traffic: Traffic from our EC2 instance.
 
 Security groups are acting as a firewall on EC2 instance
 They Regulate:
->Access to ports
-Authorized IP ranges 
-Control Inbound Traffic (To EC2)
-Control Outbound Traffic (From EC2)
+- Access to ports
+- Authorized IP ranges 
+- Control Inbound Traffic (To EC2)
+- Control Outbound Traffic (From EC2)
 
 Can be attached multiple instances
 Locked down to region/VPC combination
