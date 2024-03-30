@@ -405,3 +405,159 @@ SSH: Secure Shell cvonnection to EC2 Instance (Port: 22)
 EC2 Instance Role: Link to IAM Roles 
 Purchasing Options: On-Demand, Spot, Reserved, Dedicated Host, Dedicated Instance
 
+# EBS Elastic Block Store
+
+A EBS(Elastic Block Store) volume is a network drive you can attach to your instances while they run
+It allows your instances to persist data even after termination
+They can only be mounted by one instance (CCP Level)
+They are bound to a specific AZ
+
+## EBS Volume
+
+It's a network drive(not physical drive)
+- It uses network to communicate with instance, which means there can be a latency
+- It can be detached from an EC2 instance and attached another one pretty quickly
+
+It locked to an AZ
+- An EBS volume in eu-east-1a can't be attached to an instance in eu-east-1b
+- To move a volume across, you first need to snapshot it.
+
+Have a provisioned capacity(size in GB's and IOPS)
+- You get billed for provisioned capacity.
+- You can increase capacity over time
+
+## EBS Delete on Termination
+
+Control EBS volume behaviour when an EC2 instance is terminated.
+- For root volume it's enabled by default.
+- For any other volume that attached to EC2 instance this attribute is disabled
+
+This behaviour can be controlled by Console and CLI
+Use Case: preserve root volume when instance is terminated 
+
+## EBS Snapshots
+
+Make a backup(snapshot) of your EBS volume at a pointy in time. 
+Not necessary to detach volume to do a snapshot but recommended
+Can copy snapshots across AZ or Regions.
+
+### Snapshot Features
+
+EBS Snapshot Archive
+- Move a Snapshoty to Archive Tier that is a lot cheaper 
+- Takes within 24 to 723 hours to restore
+
+Recycle Bin for EBS Snapshots
+- Setup Rules to retain deleted snapshots so you can recover after an accidental deletion 
+- Specify retention(from 1 day to 1 year)
+
+# AMI
+
+AMI = Amazon Machine Image
+AMI are a customization of an EC2 instance 
+- You add your own software, configuration, OS, monitoring
+- Faster boot/configuration time because all software pre-packaged
+
+AMI are built for a specific region (can be copied accross the regions)
+You can launch EC2 instances from: 
+- A public AMI: AWS provided
+- Your own AMI You make and maintain yourself
+- An AWS Marketplace AMI: An AMI someone else is made and potentially sells
+
+## AMI Process
+
+Start an EC2 instance and customize it
+Stop the instance (for data integrity)
+Build an AMI - This will also creates an EBS Snapshot
+Launch instances from other AMI's. 
+
+## EC2 Image Builder 
+
+Used to automate thwe creation of VM's or Container images. 
+- Automate the creation, maintain, validate and test EC2 instance
+
+Can be run on a schedule(weakly, whenever packages updated, etc)
+Free service(Only pay for underlying resources)
+
+## EC2 Instance Store
+
+EBS volumes are network drives with good but limited performance
+If you need a high performance hardware disk, use EC2 Instance Store
+- Better IO performance
+- EC2 instance Store loose their storage if they're stopped(ephemeral)
+- Good for buffer/cache/scratch data/temporary content
+- Risk of data loss if hardware fails
+- Backups and replications are your responsibility
+
+# EFS Elastic File System
+
+Managed NFS(Network File System) that can be mounted on hundreds of EC2 instances
+EFS works with Linux EC2 instances in multi AZ
+Highly available, scalable, expensive(3x gp2), pay per use, no capacity planning
+
+## EFS Infraquent Access(EFS-IA)
+
+Storage class that is cost-optimized for files not accessed every day
+Up to %92 lower cost compared to EFS Standard
+EFS will automatically move your files to EFS-IA based on last time they accessed
+Enable EFS-IA with a lifecycle policy
+Example: move files that are not accesed for 60 days to EFS-IA
+Transparent to the applications accessing EFS.
+
+## Shared Responsibility Model for EC2 Storage
+
+### AWS
+
+Infrastructure 
+Replication for data, for EBS volumes, EFS drives
+Replacing faulty hardware
+Ensuring their employees can't access to your data
+
+### User
+
+Setting up backup/snapshot procedures
+Setting up data encryption
+Responsibility of any data on the drives
+Understanding the risk of using using EC2 Instance Store. 
+
+## Amazon FSx
+
+Launch 3'rd party high performance file system on AWS
+Fully managed service:
+- FSx for Lustre
+- FSx for Windows File Server
+- FSx for NetApp ONTAP
+
+## Amazon FSx for Windows File Server 
+
+A fully managed, highly reliable and scalable Windows Native shared file system 
+Built on Windows File Server
+Supports SMB protocol and Windowes NTFS 
+Integrated with Microsoft Active Directory
+Can be accessed from AWS or your on-premise infrastructure
+
+## Amazon FSx for Lustre
+
+A fully managed, high performance, scalable file storage for High Performance Computing(HPC)
+The name lustre is derived from linux and cluster 
+Machine Learning, Analytics, Video Processing, Financial Modelling
+Scales up to hudreds of GB/s, millions of IOPS, sub-ms latencies
+
+## EC2 Instance Storage Summary
+
+EBS volumes: 
+- Network drives that is attached to one EC2 instance at a time
+- Mapped to an AZ
+- Can use EBS Snapshots for Backups, tranferring EBS volumes across AZ
+
+AMI: create ready to use EC2 instances with our costumizations
+EC2 Image Builder: automatically build test and distrubute AMIs
+EC2 Instance Store:
+- High performance hardware disk attached to our EC2 instance 
+- Lost if our instance stopped/terminated 
+
+EFS: Network File System Can be attached hudreds of instances in a region
+EFS-IA: Cost optimization for not frequently accessed files. 
+FSx for Windows: Network file system for Windows Servers
+FSx for Lustre: High Performance Computing Linux file system. 
+
