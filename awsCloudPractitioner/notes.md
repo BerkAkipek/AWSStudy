@@ -561,3 +561,402 @@ EFS-IA: Cost optimization for not frequently accessed files.
 FSx for Windows: Network file system for Windows Servers
 FSx for Lustre: High Performance Computing Linux file system. 
 
+# ELB Elastic Load Balancing
+
+## Scalability and High Availability
+
+### Scalability
+
+Scalability möeans that an application/system can handle loads by adopting.
+There are two kinds of scalability:
+- Vertical Scalability
+- Horizontal Scalability
+
+Scalability is linked but different to  High availability.
+
+### Vertical Scalability
+
+Vertical scalability means increasing the machine size of the instance.
+For example app runs in t2.micro we can scale vertically to t2.large.
+Vertical scalability very common for non-distrubuted systems such as databases
+There's usually a limit how much you scale(hardware limit)
+
+### Horizontal Scalability
+
+Horizontal scalability means increasing the number of instances/systems for your application
+Horizontal scaling implies distrubuted systems This is very common for web applications/ modern applications
+It's easy to horizontally scale thanks to cloud offerings such as Amazon EC2
+
+### High Availability
+
+High availability usually goes hand in hand with hortizontal scaling
+High availability means running your application/system inb at least 2 AZ
+The goal of high availability is survive a data center loss(disaster)
+
+## High Availability and Scalability for EC2
+
+Vertical SCaling: Increase Instance size(scale up/down)
+- From t2.nano - 0.5 GB RAM, 1 vCVPU
+- To u-12tb1.metal - 12.3 TB RAM, 448 vCPU
+
+Horizontal Scaling: Increase number of instances(scale out/in)
+- Auto Scaling Group 
+- Load Balancer
+
+High Availability:Run instances for the same application across multi AZ
+- Auto Scaling Group Multi AZ
+- Load Balancer Multi AZ
+
+## Scalability vs Elasticity (vs Agility)
+
+Scalability: ability to accomodate a larger load by making the hardware atronger(scale up), or by adding nodes(scale out)
+Elasticity: Once a system is scalable, elasticity means that there will be some auto-scaling so that system can scale based on the load. This is cloud friendly: pay-per-use, match demand, optimize costs
+Agility(not related to scalability is a distractor): New IT resources only a click away, Which means that you reduce the time to make those resources available to your developers from weeks to just minutes.
+
+## ELB Overview 
+
+Load Balancers are servers that forward internet traffic to multiple servers(EC2 instances) downstream.
+
+### Why use a Load Balancer
+
+spread load across multiple downstream instances
+Expose a single point of access (DNS) to your application
+Seamlessly handle failures of downstream instances
+Do regular health checks to your instances
+
+Provide SSL Termination(HTTPS) to your website. 
+Highly available across zones
+An ELB(Elastic Load Balancer) is managed Load Balancer:
+- AWS guarantee that it will be working 
+- AWS takes of upgrades, maintenance, high availability
+- AWS provides only a few configuration knobs
+
+It cost less to setup your own load balancer but it will be a lot more effort on your end(maintenance, integration)
+4 kind of Load Balancers offered by AWS:
+- Application Load Balancer (HTTP/HTTPS) - Layer 7
+- Network Load Balancer (Ultra high performance allows TCP) Layer 4
+- Gateway Load Balancer (GENEVA) Layer 3
+- Classic Load Balancer (retired in 2023) - Layer 4 and 7
+
+### Application Load Balancer
+
+HTTP/HTTPS/gRPC protocols Layer 7
+HTTP Routing Features
+Static DNS
+
+### Network Load Balancer
+
+TCP/UDP Protocols (layer 4)
+High Performance: millions of requests per second
+Static IP through Elastic IP
+
+### Gateway Load Balancer
+
+GENEVE Protocol on IP Packages(Layer 3)
+Route Traffic to a Firewall that you managed on EC2 Instances
+Intrusion Detection
+
+## Auto Scaling Group(ASG) Overview
+
+In real life, the load on your websites and application can change over time
+In cloud you can create and get rid of servers very quickly
+The goal of Auto Scaling Group(ASG) is:
+- Scale out(add EC2 instances) to match an increasing load
+- Scale in(remove EC2 instances) to match a decreasing load
+- Ensure we have minimum and maximum number of machines running
+- Automatically register new instances to a load balancer
+- Replace unhealty instances
+
+Cost savings: only run at an optimal capacity(principle of cloud)
+
+## Scaling Strategies
+
+Manual Scaling: Upgrade the size of ASG manually
+Dynamic Scaling: Respond to changing Demand 
+- Simple/Step Scaling
+- - When a CloudWatch alarm is triggered(CPU > %70), then add 2 units
+- - When a CloudWatch alarm is triggered(CPU < %30), then remove 1 units
+- Target Tracking Scaling:
+- - Example: I want the avrage ASG CPU to stay at aroun %40
+- Scheduled Scaling 
+- - Anticipate a scaling based on known usage patterns
+- - Example: Increase the min capacity to 10 at 5 pm on Fridays
+- Predictive Scaling 
+- - Uses machine learning to predict future trafic ahead of the time
+- - Automatically provisions right number of EC2 instances in advance
+- - Usefull when your load has predictable time based patterns
+
+## ELB and ASG Summary
+
+High availability vs Scalability(vertical and horizontal) vs Elasticity vs Agility in the Cloud
+Elastic Load Balancer(ELB):
+- Distrubute traffic across backend EC2 instances can be multi AZ
+- Supports health checks
+- 4 types of ELB exis:
+- - Classic(old)
+- - Application(HTTP - L7)
+- - Network(TCP - L4)
+- - Gateway(GENEVA - L3)
+Auto Scaling Groups(ASG):
+- Implement elasticity for your application across multi AZ
+- Scale EC2 instances based on the demand on your system replace unhealty 
+- Integrated with the ELB
+
+# Amazon S3
+
+Amazon S3 stands for Simple Storage Service
+Amazon S3 is one of the main bulding blocks of AWS
+It's advertised as infinitely scaling storage
+Many websites use Amazon S3 as a backbone
+Many AWS services use Amazon S3 as an integration as well
+
+## S3 Use Cases
+
+Backup and storage
+Disaster Recovery
+Archive
+Hybrid Cloud Storage
+Application Hosting
+Media Hosting
+Data lakes and big data analytics
+Software Delivery 
+Static Website
+
+## Amazon S3 Buckets
+
+Amazon S3 allows people to store objects(files) in "buckets"
+Buckets must have globally unique name (across all regions all accounts)
+Buckets are defined at region level
+S3 looks like a global service but buckets bnound to a specific region
+Naming Conventions:
+- No uppercase, No Underscore
+- 3-63 characters
+- Not an IPü
+- Must start weith lower case letter or number
+
+## s3 Objects
+
+Objects(files) has a key
+The key is the full path:
+- s3://my-bucket/my-folder/my-file.txt
+
+The key is composed of prefix + object name
+There is no concept of directories within buckets
+Just keys with very long name just contain slashes(/)
+Objects values are content of the body
+- Max object size is 5 TB
+- If uploading more then 5 GB must use multi-part upload
+
+Metadata(list of key/value pairs - sytstem or user metadata)
+Tags(Unicode key/value pairs - up to 10) - usefull for security and lifecycle
+Version ID (If version enabled)
+
+## S3 Seurity
+
+User based:
+- IAM policies - which API calls should be allowed for a specific user from AMI
+
+Resource Based 
+- Bucket Policies: Bucket wise rule from s3 console - allows cross account
+- Object Access Control List(ACL): finer grain(can be disabled)
+- Bucket Access Control List(ACL): less common (can be disabled)
+
+Note: An IAM principal can access S3 object if :
+- The user IAM permissions Allow it or the resource policy allows it
+- AND there is no explicit DENY
+
+Encryption: encrypt objects in S3 using encryption keys
+
+## S3 Bucket policies
+
+JSON based policies
+- Resources: buckets and objects
+- Effect: Allow or Deny
+- Actions: Set of API calls Allow or Deny
+- Principal: The account or user to apply the policy to
+
+Use S3 bucket for policy to:
+- Grant public asccess
+- Force objects encrypted at upload
+- Grant access to another account
+
+## Bucket settings for Block Public Access
+
+These setting were created for prevent company data leaks
+If you know your bucket should never be public, leave these on
+Can be set at the account level
+
+## Amazon S3 Satic Webdsite Hosting
+
+S3 can host static website and make them accesable on the internet.
+The website URL will be:
+- http://bucket-name.s3-website-region.amazonaws.com
+
+If you get a 403 Forbidden error öake sure bucket policy allows public read
+
+## Amazon S3 Versioning
+
+You can version objects in S3
+It is enabled at the bucket level
+Same key overwrite weill change the version
+It is best practice to version your buckets
+- Protects against unintended deletion
+- Easy roll back to preevious version
+
+Notes:
+- Any file that is not versioned prior to enabling versioning will have version "null"
+- Suspending the versioning does not delete the previous version
+
+## Amazon S3 Replication (CRR and SRR)
+
+Must enable versioning in source and destination buckets
+Cross region Replication(CRR)
+Same Region Replication(SRR)
+Buckets can be in different AWS accounts
+Copying is asynchronous
+Must give proper IAM permissions to S3
+Use Cases:
+- CRR - compliance, lower latency access, replication across accounts
+- SRR - log aggregation live replication between production and test accounts
+
+## S3 Storage Classes
+
+Amazon S3 Standaerd - General Purpose
+Amazon S3 Standard- Infrequent Access
+Amazon S3 One Zone - Infrequent Access
+Amazon S3 Glacier Instant Retrieval
+Amazon S3 Glacier Flexible Retrieval
+Amazon S3 Glacier Deep Archive
+Amazon S3 Intelligent Tiering
+
+Can move between classes manually or using S3 lifecycle configurations.
+
+## S3 Durability and Availability
+
+Durability:
+- It has %99 durability
+- Same for all storage classes
+
+Availability:
+- Measures how readily available a service is
+- Varies depending on the bstorage class
+
+### S3 Standard - General Purpose 
+
+%99.99 Availability
+Used for frequently accesed data
+Low latency and high throughput
+Sustain 2 concurrent facility failures
+Use Cases:
+- Big Data Analytics
+- Mobile and Gaming Apps
+- Content Distrubution
+
+### S3 Infrequent Access
+
+For data is less frequently accessed but requires rapid access when needed
+Lower cost then S3 standard
+Amazon S3 Standard-Infrequent Access(S3 Standard IA)
+- %99.9 availability
+- USe Cases:
+- - Disaster Recovery
+- - Backups
+
+Amazon S3 One Zone - Infrequent Access(One Zone - IA)
+- High Durability in a single AZ data loss when AZ is destroyed
+- %99.5 Availability
+- Use Cases:
+- - Storing secondary backups copies of on premise data
+- - Or data you can recreate
+
+### S3 Glacier Storage Classes
+
+low cost obj storage meant for archieving/backups
+Pricing: Price for obj storage + obj retrieval cost
+Amazon S3 Glacier Instant Retrieval
+- Milliseconds retrieval, great for data accessed once a quarter
+- Minimum storage duration of 90 days
+
+Amazon S3 Glacier Flexible Retrieval(formerly Amazon S3 Glacier)
+- Expedited (1 to 5 minutes)
+- Standard (3 to 5 hours)
+- Bulk (5 to 12 hours)
+
+Amazon S3 Glacier Deep Archive - for long term storage:
+- standard(12 hours)
+- Bulk (48 hours)
+- Minimum storage duration of 180 days
+
+### S3 Intelligence Tiering
+
+Small monthly monitoring and auto tiering fee
+Moves objects automatically between Access Ties based on usage
+There are no retrieval charges in S3 Intelligen Tiering
+Frequently Accessed Tier(automatic): default Tier
+Infrequent Accessed Tier(automatic): object not accessed for 30 days
+Archive Instant Access Tie(automatic): objects not accesed for 90 days
+Archive Access Tier(optional): configurable 90 days to 700+ days
+Deep Archive Access Tier(optional): configurable from 180 days to 700+ days
+
+## S3 Encryption
+
+Server-side encrytion(default)
+- User uploads file; file encrypted in the bucket
+
+Client Side Encryption
+- Encrypts the file before uploading it
+
+## IAM Access Analyzer for S3
+
+Ensures that only intended people have access to your bucket
+Example:
+- Publicly available bucket
+- Bucket that has shared with other aws account
+
+Evaluates S3 bucket policies,S3 ACLs, S3 Access Point Policies
+Powered by IAM Access Analyzer
+
+## Shared Responsibility Model for S3
+
+### AWS
+
+Infrastructure(global security, durability, availability, sustain concurrent loss of data in two facilities)
+Configurastion and vulnurebilaty analysis
+Compliance valdation
+
+### User
+
+S3 Versionning
+S3 Bucket Policies
+S3 Replication Setup
+Logging and monitoring
+S3 Storage Classes
+Data Encryption at rest and in transit
+
+# AWS Snow Family
+
+Highly secure portable devices to collect and process data at the edge, and migrate into and out of the aws
+Data Migration:
+- Snowcone
+- Snowball Edge
+- Snowmobile
+
+Edge Computing
+- Snowcone
+- Snowball Edge
+
+## Data Migration with AWS Snow Family
+
+Challanges:
+- Limited connectivity
+- Limited bandwidth
+- High Network cost
+- Shared Bandwidth
+- Connection stability
+
+AWS Snow Family: Offline devices torm data migration and edge computing
+If it takes more then 1 week to tranfer data you should use Snowball Devices
+
+## Snowball Edge (for data transfer)
+
+Physical data trasnsport solution move TBs or PBs data in or out of AWS
