@@ -960,3 +960,158 @@ If it takes more then 1 week to tranfer data you should use Snowball Devices
 ## Snowball Edge (for data transfer)
 
 Physical data trasnsport solution move TBs or PBs data in or out of AWS
+Alternative to moving data over the network(and paying the network fees)
+Pay per data tranfer job
+Provide block storage and Amazon S3 Compatible object storage
+
+Snowball Edge Storage Optimized:
+- 80 TB of HDD capacity for block volume and S3 compatible object storage
+
+Snowball Edge Compute optimized:
+- 42 TB HDD or 28 TB NVMe capacity for block volume and S3 compatible object stotrage
+
+Use Cases:
+- Large Cloud Dasta Migration
+- DC Decommission
+- Disaster Recovery
+
+## AWS Snowcone and Sonwcone SSD
+
+Small, portable Computing anywhere rugged and secure withstands harsh environments.
+Light (4.5 pounds, 2.1 kg)
+Device used for edge computing, storage and data transfer
+Snowcone 8 TB of HDD Storage
+Snowcone 14 TB of SSD Storage
+Use Snowcone where snowball does not fit the environment
+Must provide your own battery and cables
+Can be send to AWS offline, or connect it to the internet and use AWS DataSync to send data
+
+## AWS Snowmobile
+
+Transfer exabytes of data(1 EB = 1000 TB)
+Each Snowmobile has 100 PB of capacity (use multiple in parallel)
+High security: temperature controlled, GPS, 24/7 Video Surveilance
+Better then snowball if you transfer more then 10 PB
+
+## Snow Family Usage Process
+
+1. Request Snowball devices from the AWS Console for delivery.
+2. Install the Snowball Client / AWS OpsHub on your servers
+3. Connect the snowball to your servers and copy files using the client
+4. Ship back the device when you are done
+5. Data will be loaded in to s3 bucket 
+6. Snowball is completaly wiped
+
+## What is Edge Computing
+
+Process data while it's being created on an edge location
+- A truck on the road, a ship on the sea, a minnig station underground
+
+These location may have 
+- Limited or no internet access
+- Limited or no computing Power
+
+We setup a Snowball Edge/Snowcone device to do edge computing
+Use Cases Edge Computing:
+- Preprocess Data 
+- Machine learning at the edge
+- Transcoding media streams 
+
+Eventually (if need be) we can ship back the device to AWS(for data transfer)
+
+## Snow Family Edge Computing
+
+Snowcone and Snowcone SSD Smaller
+- 2 CPU, 4 GB RAM wired and wireless access 
+- USB-C power using a cord or optional batteries
+
+Snowball Edge - Compute Optimized
+- 104 vCPU, 416 GiB of RAM
+- Optional GPU (video processing, machine learning)
+- 28 TB NVMe or 42 TB HDD usable storage
+- Storage clustring available (up to 16 nodes)
+
+Snowball Edge Storage Optimized
+- Up to 40 vCPU, 80 GiB of RAM, 80 TB of storage
+
+All: can run EC2 Instances and AWS Lambda functions(using AWS IoT Greengrass)
+Long term deployment options: 1 and 3 years discounted price
+
+## AWS OpsHub
+
+Historically, to use Snow Family Services, you need a CLI 
+Today you can use AWS OpsHub(GUI) to manage your snow family devices
+- Unlocking and configuring single or clustered devices
+- TYransferring files
+- Launching and managing instances running on Snow Family Devices
+- Monitor Device Metrics 
+- Launch compatible AWS Services on your devices (ex: EC2, AWS DataSync, Network File System(NFS))
+
+## Snowball Edge Pricing
+
+You pay for device usage and data transfer out of AWS 
+Data Transfer IN to Amazon S3 is free. 
+On-Demand:
+- Includes a one time service free per job which includes
+- - 10 days of usage for Snowball Edge Storage Optimized 80 TB
+- - 15 days of usage for Snowball Edge Storage Optimized 210 TB
+- Shipping days are not count
+- Pay per day for additional costs
+
+Commited Upfront
+- Pay in advance for monthly, 1 year or 3 years
+- Up to %62 discount
+
+## Hybrid Cloud for Storage
+
+AWS pushing for hybrid cloud 
+- Part of your infrtastructure is on-premises
+- Part of your infrastructure is on the cloud 
+
+this can be due to:
+- Long cloud migrations 
+- Security requirements
+- Compliance requirements
+- IT Strategy
+
+S3 is proprietary storage technology (unlike EFS/NFS) so how do you expose the s3 data to on premise?
+AWS Storage Gateway!
+
+## AWS Storage Cloud Native Options
+
+Block 
+- Amazon EBS
+- EC2 Instance Store
+
+File
+- Amazon Elastic File System
+
+Object 
+- Amazon S3 
+- Glacier
+
+## Amazon Storage Gateway
+
+Bridge between on-premise data and cloud data in S3
+Hybrid storage service to allow on-premnise to seamlessly use the AWS Cloud
+Use Cases:
+- Disaster Recovery
+- Backup and Restore
+
+Types of Storage Gateway
+- File Gateway 
+- Volume Gateway
+- Tape Gateway
+
+## Amazon S3 Summary
+
+Buckets and Objects: global unique name, tied to a region
+S3 Security: IAM policies, S3 Bucket policies, S3 encryption
+S3 Websites: host a static website on Amazon S3
+S3 Versioning: multiple versions for files, prevent accidental deletes
+S3 Replication: Same-Region or cross Region, must enable versioning
+S3 Storage Classes: Standard, IA, Intelligent Glacier(Instant Flexible Deep)
+Snow Family: import data onto S3 through a physical device, edge computing
+OpsHub: Desktop application to manage Snow Family Devices
+Storage Gateway: Hybrid Solution to extend on-premises storage to S3
+
