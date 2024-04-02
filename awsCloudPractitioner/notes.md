@@ -1115,3 +1115,211 @@ Snow Family: import data onto S3 through a physical device, edge computing
 OpsHub: Desktop application to manage Snow Family Devices
 Storage Gateway: Hybrid Solution to extend on-premises storage to S3
 
+# Databases
+
+Storing data on a disk (EFS, EBS, EC2 Instance Store, S3) can have its limits.
+Sometimes you want to store data in a database. 
+You can structure data in a database.
+You build indexes to efficiently query/search through data
+You define relatioshps between your datasets
+Databases are optimized for a purpose and come with a different features, shapes and constraints
+
+## Relational Databases
+
+Looks like excel sheet with links between them
+Can use the SQL language to perform queries and lookups.
+
+## NoSQL Databases 
+
+NoSQL = nonSQL == non relational database
+NoSQL databases purpose build for specific data modelsd and have flexible schemas for building modern applications
+Benefits:
+- Flexibility: easy to evolve data models
+- Scalability: Designed to scale out by distrubuted clusters
+- High Performance: Optimized for a specific data model
+- Highly functional: types optimnized for the data model
+
+Examples: key-value, document, graph, in memory, search databases
+
+## NoSQL Data Example
+
+JSON = Javascript Object Notation
+JSON is a common form of data that fits into NoSQL model
+Data can be nested
+Fields can change over time
+Supports new types like Arrays
+
+## Data Bases and SRM on AWS
+
+AWS offers use to manage different databases
+Benefits include:
+- Quick provisioning, High Availability, Vertical and horizontal scaling
+- Automated Backups and restore, Operations and upgrades
+- OS patching handled by AWS
+- Monitoring and Alerting
+
+Note: Many Database technology could be run on EC2, but you must handle yourself the resillience, backups, patching, high availability, fault tolerance, scaling.
+
+## Amazon RDS Overwiev
+
+RDS stands for relational database service
+It's managed DB service for DB use SQL query language
+It allows you to create databases inb the cloud that are managed by AWS
+- PostgreSQL
+- MySQL
+- MariaDB
+- Oracle
+- Microsoft SQL Server
+- IBM DB2
+- Aurora(AWS Proprietary Database)
+
+## Advantages of using RDS instead of DB on EC2
+
+RDS is managed service:
+- Automated provisioning
+- Continous backups, Restore to a specific timestamp(Point in time Restore!)
+- Monitoring Dashboards
+- Read replicas for improved read performance
+- Multi AZ setup for disaster recovery
+- Scaling capability(vertical and horizontal)
+- Storage backed by EBS
+
+But you can't SSH to your instances
+
+### Amazon Aurora
+
+Aurora is a proprietary database technology from AWS
+PostgreSQL and MySQL both supported
+Aurora is AWS Clud Optimized and claims 5x performance improvement over MySQL RDS, over 3x more performance then PostgreSQL RDS.
+Aurora storage automatically grows in increments of 10 GB, up to 128 TB.
+Aurora cost more then RDS (%20 more) - but it's much more efficient
+Not in the free tier
+
+### Amazon Aurora Serverless
+
+Automate database instantiation and auto scaling based on actual usage.
+PostgreSQL and MySQL both supported
+No capacity planning needed.
+Least management overhead
+Pay per second, can be more cost effective
+Use cases: Good for infrequent intermittent or unpredictable workloads
+
+### RDS Deployments
+
+Read Replicas:
+- Scale the read workloads of your DB.
+- Can create up to 15 read replicas
+- Data is only written to the main DB
+
+Multi AZ
+- Failover in case of AZ outage(high availability)
+- Data is onlly read / written to the main DB
+- Can have 1 other AZ as a failover
+
+Multi Region(Read Replicas)
+- Disaster Recovery in case of region issue
+- Local performance for global needs
+- Replication costs
+
+### ElastiCache
+
+Elasticache is to get manmaged by Redis or Memcache
+Caches are in-memory databases with high performance, low latency
+Helps reduce load of databases for read intensive workloads
+AWS takes care of OS maintenance, patching, optimization setup configurtation, monitoring, failure recovery.
+
+### Dynamo DB
+
+Fully managed highly available with replication across 3 AZ
+NoSQL database - not a relational database
+Scales to massive workloads, distributed serverless database
+Millions of requests per second, trillions of row, 100s of TB storage
+Fast and consistent in performance
+Single-digit millisecond latency - low latency retrieval
+Integrated with IAM for security, authorization and administration
+Low cost and auto scaling capabilities
+Standard and Infrequent Access(IA) Table class
+
+### DynamoDB Type of Data 
+
+DynamoDB is a key value database
+There is primary keys and atributes
+Schema defined for each item
+
+### DynamoDB Accelerator
+
+Fully managed in-memory cache for DynamoDB
+Caches most frequently accessed data in memory
+10x increased performance microseconds latency
+Secure, highly available, and highly scalable
+Difference in between ElastiCache is DAX integrated into DynamoDB, in other hand ElastiCache can be used for other DBs
+
+It's a serverless service you start with creating a table not a database
+Every item has its own schema very flexible database
+All data lives in one giant table there is noı join with other tables 
+
+### DynamoDB Global Tables
+
+Make a Dynamo DB table accesible with low latency in multiple regions
+Active-Active replication (read/write to any AWS region) - 2 way replica
+
+### Redshift
+
+Redshift is based on PostgreSQL, but it's not used for OLTP(Online Transaction Processing)
+It's OLAP - online analytical processing(analytics and data warehousing)
+Load data once every hour not every second
+10x better performance then other data warehouses, scale PBs of Data
+Columnar storage of data(instead of rows)
+Massively parallel query execution(MPP), highly available
+Pay as you go based on the instances provided
+Has a SQL interrface for performing queries
+You can integrate BI tools such as AWS Quicksight or Tableau
+
+### Redshift Serverless
+
+Automatically provisions and scales data warehouse underlying capacity
+Run analytics workloads without provisioning underlying infrastructure
+Pay only what you use (save costs)
+Cost efficient then standard
+UseCases: Reporting, dashboarding applications, real time analytics
+
+### Amazon EMR
+
+EMR stands for Elastic MapReduce
+EMR helps creating Hadoop clusters(Big Data) to analyze and process vast amount of data 
+The Clusters can be made of 100s of EC2 instances
+Also supports Apache Spark, Hbase, Presta, Flink
+EMR takes care of all provisioning and configuration
+Auto scaling and integrated with spot instances 
+Use cases: Data processing, machine learning, Web indexing
+
+### Amazon Athena
+
+Serverless query service to perform analytics against S3 objects
+Uses standard SQL language to query files
+Supports CSV, JSON, ORC, Avro, and parquet(built on Presto)
+Pricing is 5$ per TB data scanned
+Use compressed or columnar data for cost savings
+Use Cases:
+- BI
+- Analytics
+- Reporting
+- Analyze and Query VPC flowlogs
+- Analyze ELB logs
+
+## Exam Tip: Analyze data in S3 using serverless SQL, use Athena
+
+### Amazon Quicksight
+
+Serverless machine learning powered BI service to create interactive dashboards
+Fast automatically scalable embeddable with per session pricibg
+Use Cases:
+- Business Analytics
+- Building Visualizations
+- Perfgorm ad-hoc analysis
+- Get business insişghts using data 
+
+Integrated with RDS, Aurora, Athena, Redshift, S3...
+
+### DocumentDB
+
