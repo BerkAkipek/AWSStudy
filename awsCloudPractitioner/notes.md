@@ -1323,3 +1323,90 @@ Integrated with RDS, Aurora, Athena, Redshift, S3...
 
 ### DocumentDB
 
+Aurora is an AWS implemantation of MySQL/PopstgreSQL
+Document DB is the same forMongDB(NoSQL)
+MongoDB used to store, query and index JSON data
+Smimlar deployment concepr as Aurora
+Fully managed highly available with replication across 3 AZ
+DocumentDB storage automatically grows in increments of 10 GB 
+Automatically scales to workloads with millions of requests per seconds
+
+### Amazon Neptune 
+
+Fully managed graph database
+A popular graph datasaet would be a social network
+- Users have friends
+- Posts have comments
+- Comments have likes from users
+- Users share and like posts
+
+Highly available across 3 AZ, with up to 15 replicas
+Build and run applications working with highly connected datasets
+Great for knowlerdge graphs(wikipedia), fraud detection, recommandation engine, social networking
+
+### Amazon Timestream 
+
+Fully managed, fast, scalable, serverless time series database
+Automatically scales up and down to adjust capacity
+Store and analyze trillions of events per day
+1000s times faster and 1/10th the cost Relational Databases
+Built in time series analytics functions(helps you identify patterns in your data in real time)
+
+### Amazon Quantum Ledger Database
+
+QLDB is an abroviation for Quantum Ledger Database
+A ledger is a book recording finasncial transactions
+Fully managed, Serverless, Highly Available, Replications across 3 AZ
+Used to review history of all the changes made to your application data over time
+Immutable system: no entry can be removed or change over time
+Cryptyographically verified
+Better performance then common ledger block-chain frameworks, manipulate data using SQL
+Difference with Amazon Block Chain: no decentralization over data 
+In accordance with financial regulations
+
+### Amazon Managed BlockChain
+
+Blockchain makes it possible to build applications where multiple parties can execute transactions without the need for a trusted, central authority
+Amazon Managed Blockchain Service can:
+- Join public blockchain Networks
+- Or create your own scalable private network
+
+Compatible with frameworks Hyperledger Public and Etherium
+
+### AWS Glue
+
+Managed ETL service
+Easily create Extract, Transform and Load pipelines
+USefull to prepare and transform data for analytics
+Fully serverless service
+
+### DMS - Database Migration Service
+
+Quickly and securely migrate your databases to AWS
+Its resillient and self healing
+The source remain available during the data transfer
+Supports:
+- Homogeneous Migrations: Oracle to Oracle
+- Heterogeneous Migrations: Microsoft to Aurora
+
+## Databases adn Analytics Summary
+
+RDS(Relational Databse Servbice)'es are good in OLTP(Online Transaction Processing)
+There does exist some differences between fo0llowing concepts: Multi AZ, Read Replicas, Multi Region
+ElastiCache: Inmemory Database
+DynamoDB is a serverless key/value database
+There is a cache for DynamoDB it's called DAX(DynamoDB Accelerator)
+Redshift is an online Data Warehouse(SQL)(OLAP - Online Analytical Processing NOT OLTP - Online Transaction Processing)
+EMR manages Hadoop Clusters
+Athena: Query data on Amazon S3(Uses SQL with serverless fashion)
+QuickSight: BI service for creating dashboards for data.(Serverless)
+DocumentDB: Aurora for MongoDB(JSON - NoSQL)
+Amazon QLDB stands for Quantum Ledger Database. It's a Financial Transaction Ledger(immutable, cryptographically verified)
+Amazon Managed Block Chain: Managed Hyperledger Fabric and Etherium Blockchains
+Glue: Managed ETL and Data Catalog Service
+DMS: Database Migration Service 
+Timestream: Time series Database
+
+# Deployment and Function as a Service
+
+## ECS
