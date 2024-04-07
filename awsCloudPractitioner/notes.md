@@ -1409,4 +1409,190 @@ Timestream: Time series Database
 
 # Deployment and Function as a Service
 
-## ECS
+### What is a Docker Container
+
+Docker is a software development platform to deploy applications.
+Apps are packaged in containers that can be run any OS
+Apps run the same regardless of where they run
+- Any machine
+- No compatibility Issues
+- Predictable behaviour
+- less work
+- Easier to maintain and deploy 
+- Works with any language, any OS
+
+Scale containers up and down very quickly
+Docker images are stored in Docker Repositories
+Public: DockerHUB
+- Find base images for many techgnologies and OS
+- Ubuntu, MySQL, NodeJS
+
+Private: Amazon ECR(Elastic Container Registery)
+
+### Docker vs VM
+
+Docker is a virtualization technology
+Resources are shared with the host (many containers on one server)
+
+## ECS(Elastic Container Service)
+
+Launch Docker Containers on AWS
+You must provision and maintain the infrastructure(EC2 instances)
+AWS takes care of starting and stopping the containers
+Has integration with thye Application Load Balancer
+
+## Fargate
+
+Launch Docker Containers on AWS
+You don't provision the infrastructure
+It's simpler then ECS
+It is serverless
+AWS just run the containers based on the CPU and RAM you need
+
+## ECR
+
+Stands for Elastic Container Registery
+Private Docker Registery on AWS
+This is where you store your docker images so they can run on ECS or Fargate
+
+### Serverless
+
+Serverless is a new paradigm in which the developers don't have to manage the servers anymore
+They just deploy the code
+They just deploy the functions
+Initially Serverless == FaaS(Function as a Service)
+Serverless pioneered by AWS Lambda but now also includes anything that managed "Databases, messaging Storage"
+Serverless does not mean there is no servers
+It means that you don't provision and manage or even see them
+
+### Why AWS Lambda
+
+#### EC2
+
+Virtual servers in the cloud 
+Limited by thge RAM and CPU
+Continously running
+Scaling means intervention to add or remove servers
+
+#### Lambda
+
+Virtual Servers no servers to manage 
+Limited by time - short executions 
+Run on-demand
+Scaling is automated
+
+### Benefits of AWS Lambda
+
+Easy pricing:
+- Pay per rquest and comnpute time
+- Free tier of 1 000 000 lambda requests and 400 000 GB's of compute time
+
+Integrated with whole AWS suite
+Event Driven: Functions invoked when needed.
+Integrated with many programming languages
+Easy monitoring through AWS CloudWatch
+Easy to get more resources for functions(Up to 10 GB of RAM)
+Increasing RAM will also improve CPU and Networking
+
+### Lambda Language Support 
+
+NodeJS
+Python
+Java
+C#
+Go
+Ruby
+Lambda Container Image: 
+- The container image must implement the Lambda Runtime API
+- ECS/Fargate is preffered for running arbitrary Docker Images
+
+Use Case:
+- You can create a thumbnail and metadata in DB with an event trigger like saving a photograph
+- You can run CRON jobs periodically
+
+### Lambda Pricing
+
+Pay per calls:
+- First 1000000 requests are free
+- 0.20$ per 1 million requests there after
+
+Pay per duration:
+- 400 000 GB-second of compute time per month is free
+- == 400 000 GBs if function is 1 GB RAM 
+- == 3200000 GBs if function is 128 MB RAM
+- After that $1.00 for 600000 GBs
+
+It is usually very cheap to run lambda so it's very popular
+
+## Amazon API Gateway
+
+Example: Building a serverless API
+Fully managed service for developers to easily create, publish, maintain, monitor and secure API'S
+Serverless and scalable
+Supports RESTfull APIs and WebSocket API's
+Support for security user authentication, API throtling API keys
+
+## AWS Batch
+
+Fully managed batch processing at any scale
+Efficiently run 100000s of computing batch jobs on AWS
+A batch job is a job that has a start and end point(opposed to continous)
+Batch will dynamically launch EC2 or Spot instances
+AWS Batch provisions right amount of compute memory
+You submit or schedule and AWS does the rest 
+Batch jobs are defined as Docker images and run on ECS
+Helpfull for cost optimizations and focusing less on the infrastructure
+
+### Batch vs Lambda
+
+#### Lambda
+
+Time limit
+limited runtime
+Limited and temporary disk space
+Serverless
+
+#### Batch
+
+No time limit
+Any runtime as l0ng as its packaged as a Docker Image
+Rely on EBS / instance store for disk storage
+Relies on EC2 can be managed by console
+
+## Amazon LightSail
+
+Virtual servers, storage, databases and networking
+Low and predictable pricing
+Its a simpler alternative to other AWS services
+Great for people with less cloud cloud experience
+Can setup notifications and monitoring of your lightSail resources
+Use Cases:
+- Simple Web Applications(has templates for LAMP, Nginx, MEAN, Nodejs)
+- WEbsites (Templates for Wordpress, Magenta, Plesk)
+- Dev/TEst environments
+
+Has high availability but no auto scaling
+
+### Other Compute Summary 
+
+Docker: Container technology to run applications
+ECS: run Docker containers on EC2 instances 
+Fargate: 
+- Run Docker containers without provisioning infrastructure
+- Serverless offering
+
+ECR: Private Docker Images Registery
+Batch: run Batch Jobs on managed EC2 instances
+Lightsail: Predictable, low pricing for simple apps and database stacks
+
+### Lambda Summary 
+
+Lambda is a Function as a Service, serverless, seamless scaling, reactive
+Lambda Billing:
+- By the time run X by the RAM provisioned
+- By the number of invocations
+
+Supports many programming language
+Invocation time up to 15 minutes
+API Gateway: Expose Lambda functions as a HTTP API.
+
