@@ -1596,3 +1596,234 @@ Supports many programming language
 Invocation time up to 15 minutes
 API Gateway: Expose Lambda functions as a HTTP API.
 
+# Deploying And Monitoring Infrastructure
+
+## CloudFormation
+
+Cloudformation isd a declerative way of outlining your AWS infrastructure, for any resources(most of them are supprted)
+For example with Cloudformation Template:
+- I want a security group
+- I want a S3 bucket
+- I want a Load Balancer(ALB) in front of these machines
+
+Then Cloudformation create those resources for you, in the right order, with the exact configuration you specify
+
+### Benefits of Cloudformation
+
+Infrastructure as Code:
+- No resources are monually created
+- Changes to the infrastructure reviewed through code
+
+Cost:
+- Each resources within the stack is tagged with an identifier so you can easily see how much a stack costs you
+- You can estimate the costs of your resources using the Cloudformation Template
+- Savings Strategy: In development you can automatically delete and recreate templates
+
+Productivity: 
+- Ability to destroy and recreate infrastructure on the fly
+- Automated generation of Diagram for your template
+- Declerative Programming(no need to figure out ordering and orchestration)
+
+Don't re-invent the wheel:
+- Leverage existing templates on the web
+- Leverage the documentation
+
+Supports almost all AWS resources:
+- Every technology that exist in this document is supported
+- You can use "custom resources" for resources that are not supported
+
+We can see all the resources
+We can see the realations between the components
+
+## AWS Cloud Development Kit(CDK)
+
+Define your cloud infrastructure using a programming language
+supports:
+- Python
+- Java
+- Javascript
+- C#
+
+The code compiled to a Cloudformation Template(JSON/YAML)
+You can therefore deploy your infrastructure application runtime together
+- Great for Lambda Functions
+- Great for Docker Containers in ECS/EKS
+
+### Developer Problems on AWS
+
+Managing Infrastructure
+Deploying Code
+Configuring Database, Loud Balancers etc.
+Scaling Concerns
+Most of Web Apps have the same architecture (ALB + ASG)
+All the developers want is fıor their code is to run
+Possibly consistently across different apps and environments
+
+## AWS Elastic Beanstalk
+
+Elastic Beanstalk is a developer centric way of deploying an application
+It uses components:
+- EC2
+- ELB
+- RDS
+- ASG
+
+But it's all in one view easy to make sense of
+We still havbe full control over the configuration
+Beanstalk == Platform as a Service(PaaS)
+Beanstalk is free you only pay for underlying resources
+Managed Service:
+- Instance configuration and OS handled by AWS
+- Deployment Strategy is configurable but performed by Elastic Beanstalk
+- Capacity provisioning
+- Load Balancing and Auto Scaling
+- Application Health - monitoring and responsiveness
+
+Just the application code is the responsibility
+Three architecture Model:
+- Single instance deployment: Good for Dev
+- ALB + ASG: Great for production or pre-production web applications
+- ASG only: great for non-web applkications in production(workers etc)
+
+Supports many platform:
+- Go
+- Java Tomcat
+- NodeJS
+- PHP
+- Python
+- Package Builder
+- Single Container Docker
+- Multi Container Docker
+- Pre-configured Docker
+
+### Beanstalk - Health Monitoring
+
+Health agent pushes metrics to CloudWatch
+Checks for app health, publishes health events
+
+## AWS Code Deploy 
+
+We want to deploy our application automatically 
+Works with EC2 instances
+Works with on-premises servers
+Hybrid service
+Servers / Instances must be provisioned and configured ahead of time with the CodeDeploy Agent
+
+## AWS Code Commit 
+
+Before pushing the code to servers it needs to store somewhere
+Dev's store code using Git
+Github is a famous public offering, CodeCommit is the competing product of AWS
+Code commit:
+- Source control service that hosts Git-based repos
+- Makes it easy to collabrate other on code
+- The code changes are automatically versioned
+
+Benefits:
+- Fully managed
+- Scalable and highly available 
+- Private, secure, Integrated with AWS
+
+## AWS CodeBuild
+
+Code building service in the cloud
+Compiles source code, run tests and produces a packege that ready to deploy
+Benefits:
+- Fully managed, Serverless
+- Continously scaling and highly available
+- Secure
+- Pay as you go - only paid for build time
+
+## AWS CodePipeline
+
+Orchestrate the different steps to have the code automatically pushed to production
+- Code -> Build -> Test -> Provision -> Deploy
+- Basis for CI/CD
+
+Benefits:
+- Fully managed compatible with CodeCommit, CodeBuild, CodeDeploy, Beanstalk, Github, 3rd Parties etc
+- Fast delivery, rapid updates
+
+## AWS CodeArtifact
+
+Software packages often depends on each other to build(often called dependencies) and new ones are created
+Storing and retrieving these dependecies is called artifact management 
+Traditionally you need to setup your own artifact management system
+CodeArtifact is a secure, scalable and cost-effective way of artifact management for software development 
+Works with common dependency management softwares such as Maven, Gradle, npm, yarn, pip, etc.
+Developers and CodeBuild can then retrieve dependencies straight from CodeArtifact 
+
+## AWS Cloud9
+
+AWS Cloud9 is a Cloud IDE(Integrated Development Environment) for writing running and debugging the code
+Classic IDE downloaded on a computer before being used
+AWS Cloud9 also allows you to collabration in real-time(pair programming)
+
+## AWS System Manager(SSM)
+
+Helps you manage your EC2 and On-Premises systems at scale
+Another Hybrid AWS Service
+Get operational insights about the state of your infrastructure
+Suite of 10+ products
+Most important features are:
+- Patching automation for enhanced compliance 
+- Run commands across an entire fleet of servers
+- Store parameter configuration with the SSM Parameter Store
+
+Works for Linux, Windows, MacOS and RsberryPi OS(Raspbian)
+
+### How System Manager(SSM) Works
+
+We needf to install SSM Agent onto the systems we control
+Installed by default on Amazon Linux AMI and some Ubuntu AMI
+If an instance can't be controlled with SSM, it is probably an issue with SSM Agent
+Thanks to the SSM Agent we can run commands, patch and configure our servers
+
+### SSM Session Manager
+
+Allows you to start SSH on your EC2 and on-premises servers
+No SSH access, bastion hosts, or SSH keys needed
+No Port 22 needed(Better security)
+Supporets Linux, MacOS, Windows
+Send session log data to S3 or CloudWatch logs
+You need to assign SSM Core Access Role to your EC2 instance
+
+For SSH you need:
+- A key pair SSH access on port 22 for manual connection
+- You can use EC2 connect without a key but you still need port 22 opened
+- With SSM SessionMAnager you can start SSH Connection without a key with closed port 22
+
+### SSM Parameter Store
+
+Secure storage for configuration and secrets
+API keys, passwords, configurations
+Serverless, scalable, durable, easy SDK
+Control access permissions via IAM
+Version Tracking and encryption(optional)
+
+### Deployment Summary
+
+CloudFormation(AWS only):
+- Infrastructure as Code, works with almost all AWS resources
+- Repeat across Regions and accounts
+
+Beanstalk(AWS only):
+- Platform as a Service(PaaS), Limited to certain programming languages and Docker
+- Deploy code consistently with a known architecture(ex ALB + EC2 + RDS)
+
+CodeDeploy(Hybrid):
+- Deploy and upgrade any application on servers
+
+System Manager:
+- Patch, configure and run commands at scale
+
+### Developer Services Summary
+
+CodeCommit: Private Repositories in AWS
+CodeBuild: Build and Test Code in AWS
+CodeDeploy: Deploy Code onto servers
+CodePipeline: Orchestration of Pipeline(CI/CD)
+CodeArtifact: Store software packages/dependencies on AWS
+CodeStar: Unified view for developers to do CI/CD
+Cloud9: CloudIDE with collab
+AWS CDK: Define your infrastructure using a programming language.
