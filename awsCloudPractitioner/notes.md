@@ -2044,3 +2044,83 @@ AWS Local Zones
 - Bring AWS resources(compute, database, storage) closer to your users
 - Good for latency sensitive applications
 
+# Cloud Integrations
+
+## Introduction
+
+When we start deploying multiple applications they will inevitably communicate with one another
+There are two patterns of communication 
+1. Synchronous Communications(application to application)
+2. Asynchronous Communications / Event Based (application to queue to applicaiton)
+
+Synchronous communication between applicaitons can be problematic if there are sudden spikes of traffic
+What if you need to suddenly encode 1000 videos but usually it's 10?
+In that case it is better to decouple your application
+- Using SQS: queue model
+- using SNS: pub/sub model
+- using Kinesis: real-time data streaming model 
+
+These services can scale independently from our application.
+
+## Amazon SQS (Simple Queue Service)
+
+Oldest AWS offering (over 10 years)
+Fully managed service(serverless), use to decouple applications
+Scales from 1 message per second to 10000s per second
+Default retention of messages: 4 days, maximum of 14 days
+Messages are deleted after they're read by consumers
+Low-Latency (<10 ms on publish and receive)
+Consumers share the work to read messages and scale horizontally
+
+## Amazon SQS - FIFO Queue
+
+FIFO = First In First Out (ordering of messages in the queue)
+Messages are processed in order by the consumer 
+
+## Amazon Kinesis
+
+Kinesis = real-time big data streaming 
+Manbaged service to collect, process and analyze real-time streaming data at any scale
+Types of Kinesis:
+- Kinesis Data Streams: low-latency streaming to ingest data at scale from thousands of resources
+- Kinesis Data FireHouse: Load streams into S3, RedShift, ElasticSearch, etc...
+- Kinesis Data Analytics: Perform real-time analytics on streams using SQL
+- Kinesis Video Streams: Monitor Real-Time video streams for analytics and ML
+
+## Amazon SNS(Simple Notification Service)
+
+The "event publishers" only sends message to one SNS topic 
+As many "event subscribers" as we want to listen to the SNS topic notifications
+Each subscriber to the topic will get all the messages 
+Up to 12 500 000 subscriptions per topic, 100000 topics limit
+
+## Amazon MQ
+
+SQS, SNS are cloud native services proprietary protocols from AWS
+Traditional applications running from on-premises servers may use open protocals such as: MQTT, AMQP, STOMP, Openwire, WSS
+When migrating to the cloud, instead of re-engineering the applications to use SQS, SNS we can use Amazon MQ
+Amazon MQ is a managed message broker service for RabbitMQ and ActiveMQ
+Amazon MQ doesn't scale as much as SQS / SNS
+Amazon MQ runs on servers, can run on Multi AZ with Failover
+Amazon MQ has both queue feature (SQS) and topic features (SNS)
+
+## Integration Section - Summary
+
+SQS:
+- Queue service in AWS 
+- Multiple producers, messages kept up to 14 days 
+- Multiple consumers share the read and delete messages when done
+- Used to decouple applications in AWS 
+
+SNS:
+- Notiffication Service in AWS
+- Subscribers: Email, Lambda, SQS, HTTP, Mobile, ...
+- Multiple Subscribers, send all messages all of them 
+- No message retention 
+
+Kinesis:
+- Real-time data streaming, persistence, and analysis
+
+Amazon MQ
+- Managed message broker for ActiveMQ and RabbitMQ in the cloud (MQTT, AMQP protocols)
+
