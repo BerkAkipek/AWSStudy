@@ -2385,7 +2385,7 @@ Is Stateful: Return traffic is automatically allowed regardles of any rules
 We evaluate all rules before deciding whether to allow traffic
 Applies to an instance only if someone specifies the security group when launching the instance or associates the security group with instance later on
 
-### Network ACL
+### NACL(Network Access Control List)
 
 Operates at the subnet level
 Supports allow rules and deny rules
@@ -2476,4 +2476,374 @@ Site top Site VPN: VPN over public internet between on-premises Data Center and 
 Client VPN: Open VPN connetion from your computer into your VPC 
 Direct Connect: Direct Private connection to AWS(physical connection)
 Transit Gateway: Connect 1000s of VPC and on-premises networks together
+
+# Security and Compliance
+
+## AWS Shared Responsibility Model
+
+AWS resposibility - Security of the Cloud
+- Protecting infrastructure(hardware, software, facilities, and networking) that runs all the AWS Services
+- Managed services like S3, DynamoDB, RDS, etc...
+
+Customers Responbsibility - Security in the Cloud
+- For EC2 instance, customer responsible for management of the guest OS(including patches and updates), firewall and Network Configurations, IAM, etc...
+- Ecrypting application Data
+
+Shared Controls:
+- Patch management, Configurastion management, Awareness and Training
+
+### Example for RDS
+
+AWS responsibility:
+- MAnage underlying EC2 instance, disable SSH access, 
+- Automated Database patching
+- Automated OS Patching
+- Audit underlying instance and disk, guarantee it functions
+
+Your Responsibility:
+- Check the ports, IP, security group inbound rules
+- In Database user creation and permissions
+- Creating a database with or without public access
+- Ensure parameter groups or DB is configured to only allow SSL connection
+- Database encryption settings
+
+### Example for S3
+
+AWS Responsibility:
+- Guarantee you get unlimited storage
+- Guarantee you get encryption
+- Ensure seperation of the Data between different customers
+- Ensure AWS employees can't accesss your data
+
+Your Responsibility:
+- Bucket configuration
+- Bucket policy/public settings
+- IAM user and roles
+- Enabling encryption
+
+### What is a DDoS Attack?
+
+Distrubuted Denial-of-Service
+A hacker launch bunch of master servers
+Each master server launch bunch of bots
+These bots start sending many requests to your application
+Your server become down under this load 
+
+### DDoS Protection in AWS
+
+AWS Shield Standard: Protect against DDoS attacks for your websites and application, for all customers at no additional costs
+AWS Shield Advaced: 24/7 Premium DDoS protection 
+AWS WAF(Web Application Firewall): Filter specific requests based on the rules
+CloudFront and Route53: 
+- Availability protection using global edge network 
+- Combined with AWS Shield, provides attack migration at the edge
+
+Be ready to leverage and scale AWS Auto Scaling
+
+## AWS Shield
+
+AWS Shield Standard:
+- Free service that activated for every customer
+- Provides protection from attacks such as SYN/UDP Floods, Reflection Attacks and other Layer 3/4 attacks
+
+AWS Shield Advanced:
+- Optional DDoS mitigation Service ($3000 per month per organization)
+- Protect against attacks on Amazon EC2, ELB, AWS CloudFront, AWS Global Accelerator, Route53
+- 24/7 access to AWS DDoS response team(DRP)
+- Protect against higher fees during usage spikes due to DDoS
+
+## AWS WAF - Web Application Firewall
+
+Protects your web application from common web exploits(Layer 7)
+Layer 7 is HTTP (vs Layer 4 is TCP)
+Deploy on ALB, API Gaateway, CloudFront
+Define Web ACL(Application Control List):
+- Rules can include IP addresses, HTTP headers, HTTP body or URI strings
+- Protects from common attacks - SQL Injections and Cross Site scripting(XSS)
+- Size constraints, geo-match(block countries)
+- Rate-based rules(to count occurences of events) - for DDoS protection
+
+## AWS Network Firewall
+
+Protect your entire VPC
+From Layer 3 to Layer 7 protection
+Any direction, you can inspect:
+- VPC to VPC traffic
+- Outbound to Internet
+- Inbound from Internet
+- To/from Direct Connect and Site to Site VPN
+
+## AWS Firewall MAnager
+
+Manage security rules in all accounts of an AWS Organization
+Security policy: common set of security rules
+- VPC security Groups for EC2, ALB, etc...
+- WAF Rules
+- AWS Shield Advanced
+- AWS Network Firewall
+
+Rules are applied to new resources as they are created(good for compliance) across all and feature accounts in your organization
+
+### Penetration Testing in AWS Cloud
+
+AWS costumers welcome to carry out security assessments or penetration tests against their AWS infrastructure without prior approval for these services:
+- Amazon EC2 instances, NAT Gateways and ELB
+- Amazon RDS
+- Amazon CloudFront
+- Amazon Aurora
+- Amazon API Gateway
+- AWS Lambda and Lambda Edge functions
+- Amazon LightSail resources
+- Amazon Elastic Beanstalk environments
+
+List can increase over time
+
+Prohibited activities:
+- DNS Zone walking via Amazon Route53 Hosted Zones
+- Denial of Service(DoS), Distrubuted Denial of Service(DDoS), Simulated DoS and Simulated DDoS
+- Port flooding
+- Protocol Flooding
+- Request flooding(login request flooding, API request flooding)
+
+For any other simulated events contact AWS Security Team
+
+### Encryption at AWS
+
+Data at Rest: Data stored or archived on a device 
+- On a Harddisk, on a RDS instance, in S3 Glacier Deep Archive, etc...
+
+Data in Transit(in motion): Data being moved from one location to another
+- Transfer from on-premises to AWS, EC2, DynamoDB etc...
+- Means data transferred on the network
+
+We want to encrypt data in both states!
+For this we leverage encryption keys.
+
+## AWS KMS(Key Management Service)
+
+Anytime you hear "encryption" for an AWS Service, it's most likely KMS
+KMS: AWS manages the encryption keys for us
+Encryption Opt-In:
+- EBS volumes: encrypt volumes
+- S3 Buckets: Server-Side encryption of objects
+- Redshift DB: encryption of data
+- RDS Database: encryption of data
+- EFS drives: encryption of data
+
+Encryption automatically enabled:
+- CloudTrail Logs
+- S3 Glacier
+- Storage Gateways
+
+## CloudHSM
+
+KMS -> AWS manages the software for encryption
+CloudHSM -> AWS provisions encryption hardware 
+Dedicated Hardware(HSM = Hardware Security Module)
+You manage your own encryption keys entirely(not AWS)
+HSM device is tamper resistant, FIPS 140-2 Level 3 compliance which is a security standard
+
+### Types of KMS Keys
+
+Customer Managed Keys:
+- Create, manage and used by customer, can enable or disable
+- Possibility of Rotation Policy(new key generated every year, old keys preserved)
+
+AWS Managed Keys:
+- Created, managed and used on customers behalf by AWS 
+- Used by AWS Services(aws/s3, aws/ebs, aws/redshift)
+- Collection of CMKs that an AWS Service owns and manages to use in multiple accounts
+- AWS can use those to protect resources in your account(but you can't view keys)
+
+CloudHSM Keys(Custom Keystore):
+- Keys generated from your own CloudHSM Hardware device
+- Cryptographic operations are performed within the CloudHSM cluster
+
+## AWS Certificate MAnager
+
+Let's you easily provision, manage and deploy SSL/TLS Certificates
+Used to provide in-flight encryption for websites(HTTPS)
+Supports both public and private SSL certificates
+Automatic certificate renewal
+Integration with(load TLS certificates on):
+- ELB
+- CloudFront Distrubutions
+- APIs and API Gateway
+
+## AWS Secret Manager
+
+Newer service, meant for storing secrets
+Capability to force rotation of secrets every X days
+Automatic ge neration of secrets on rotation(uses Lambda)
+Integration with Amazon RDS(MySQL, PostgreSQL, Aurora)
+Secrets are encrypted using KMS
+Mostly meant for RDS integration 
+
+## AWS Artifact (not really a Service)
+
+Portal that provides customers with on-demand access to AWS compliance documentation and AWS Aggrements
+Artifact Reports: Allows you to download AWS Security and Compliance Documents from 3rdf party auditors like AWS ISO certifications, Payment Card Industry(PCI) and System and Organization Control(SOC)reports
+Artifact Aggrements: Allows you to review, accept and track the status of AWS agreements such as the Business Associate Addendum(BAA) or the Health Insurance Portability and Accountability Act(HIPAA) for an individual account or in your organization
+Can be used to support internal audit or compliance
+
+## Amazon Guard Duty
+
+Intelligent Thread discovery to protect AWS account 
+Uses ML algorithms, anbomaly dsetection, 3rd party data
+One click to enable(30 days trial), no need to install software
+Input data includes: 
+- CloudTrail Events Logs: unusual API calls, unauthorized deployments
+- - CloudTrail Management Events: Create VPC subnet, create trail
+- - CloudTrail S3 Data Events: get object, list objects, delete object, ...
+- VPC Flow Logs: unusual internet traffic, unusual IP addresses
+- DNS logs: compromised EC2 instances, sending encoded data within DNS queries
+- Optional Features: EKS Audit Logs, RDS and Aurora, EBS, Lambda, S3 Data Events, ...
+
+Can setup EventBridge rules to be notified in case of findings
+EventBridge rules can target Lambda or SNS
+Can protect against CryptoCurrency attacks(has a dedicated finding for it)
+
+## Amazon Inspector
+
+Automated Security Assessments
+For EC2 Instances:
+- Leveraging AWS System Manager(SSM) agent
+- Analyze against unintended Network Accesibility
+- Analyze running OS against known vulnerabilities
+
+For Container images pushed to Amazon ECR:
+- Assessment of container images as they are pushed
+
+For Lambda Functions:
+- Identifies software vulnerabilities in function code and package
+- Assessment of functions as they are deployed 
+
+Reporting and Integration with AWS Security Hub
+Send findings to Amazon EventBridge
+
+### What does Amazon Inspector Evaluates?
+
+Remmeber: Only for EC2 instances, Container images in ECS and Lambda functions
+Continous scanning of infrastructure, only when needed
+Package vulnerabilities(EC2, ECR, Lambda) - database of CVE
+Network reachibility(EC2)
+A risk score associated with all vulnerabilities for priorization
+
+## AWS Config
+
+Helps with auditing and recording compliance of your AWS resources
+Helps record configurations and changes over time
+Possibility of storing the configuration data into S3(analyzed by Athena)
+
+Questions that can be solved by AWS Config:
+- Is there unrestricted SSH access to my security groups?
+- Do my buckets have any public access?
+- How has my ALB configuration changed over time?
+
+You can receive alerts(SNS notifications) for any changes
+AWS Config is a per-region service
+Can be aggregated across regions and accounts
+View compliance of a resource over time 
+View configuration of a resource over time
+View CloudTrail API calls if enabled
+
+## Amazon Macie
+
+Amazon Macie is a fully managed data security and data privacy service that uses ML and pattern matching to discover and protect your sensitive data in AWS.
+Macie helps identify and alert you to sensitive data, such as Personally Identifiable Information(PII)
+
+## AWS Security Hub
+
+Central security took to manage security across several AWS accounts and automate security checks 
+Integrated dashboards showing current security and compliance status to quickly take actions 
+Automatically aggregates in predefined or personal findings from various AWS services and AWS Partner Tools:
+- Config
+- GuardDuty
+- Inspector
+- MAcie
+- IAM Access Analyzer 
+- AWS System MAnager 
+- AWS Health
+- AWS Partner Network Solutions
+
+Must first enable the AWS Config Service
+
+## Amazon Detective 
+
+GuardDuty, MAcie and Security Hub are used to identify potential security issues or findings
+Sometimes security finding require deeper analysis to isolate the root cause and take action - it's a complex process
+Amazon Detective analyzes, investigate and quickly identifies the root cause of security issues or suspicious activities
+Automatically collects and process events from VPC Flow Logs, CloudTrail, GuardDuty and create a unified view
+Produces visualizations with details and context to get the root cause 
+
+## AWS Abuse 
+
+Report suspected AWS resources used for abusive or illegal purposes
+Abusive and prohibited behaviours are:
+- Spam - receiving undesired emails, from AWS-owned IP address, websites and forums spammed by AWS resource
+- Port Scanning: Sending packets to your ports to discover the unsecured ones
+- DoS and DDoS Attacks: AWs owned resources try to overwhelm or crash your servers/softwares
+- Intrusion Attempts: Logging in on your resources 
+- Hosting objectionable or copyrighted content without consent
+- Distrubuting Malware: AWS resources distrubuting softwares to harm computers and machines
+
+For any of the above contact with AWS Abuse Team
+
+## Root User Priviliges
+
+Root User == Account Owner(created when account is created)
+HAs complete control and access to all AWS services and resources 
+Lock away your AWS account root user access keys!
+Do not use your root account for every day tasks, even administrative tasks
+
+Actions that can be performed by only root user:
+- Change account Settings(account name, email, root user password, rtoot user access keys)
+- View certain tax invoices
+- Close your AWS Account
+- Restore IAM permissions
+- Change or cancel your AWS Support Plan
+- Register as a Seller in the Reserved Instance Marketplace
+- Configure an S3 Bucket to enable MFA 
+- Edit or delete an Amazon S3 Bucket policy that includes an invalid VPC ID or VPC Endpoint ID 
+- Sign up for GovCloud
+
+## IAM Access Analyzer
+
+Find out which resources shared externally 
+- S3 Buckets
+- IAM Roles
+- KMS Keys
+- Lambda functions and layers
+- SQS Queries
+- Secret MAnager Secrets
+
+Define Zone of Trust: AWS Account or AWS Organization
+Access outside zone of trust -> findings
+
+### Security and Compliance - Summary
+
+Shared Responsibility model in AWS
+Shield: Automatic DDoS protection + 24/7 support for advanced
+WAF: Firewall to filter incoming requests based on the rules 
+KMS: Encryption keys managed by AWS
+CloudHSM: Hardware encryption, we manage encryption keys
+AWS Certificate Manager: Provision, Manage and deploy SSL/TLS Certificates
+Artifact: Get access to compliance reports such as PCI, ISO, etc...
+GuardDuty: Find malicious behaviour with VPC, DNS and CloudTrail Logs
+Inspector: Find software vulnerabilities in EC2 instances, ECR images and lambda functions
+NEtwork Firewall: Protect VPC against network attacks
+Config: Track config changes and compliance against rules 
+Macie: Find sensitive data(ex: PII) in S3 buckets
+CloudTrail: Track API calls made by users within account 
+AWS Security Hub: gather security findings from multiple accounts
+Amazon Detective: Find the root cause of security issues or suspicious activities
+AWS Abuse: Report abusive or malicious AWS resources
+Root User Priviliges:
+- Change account settings
+- close your AWS account 
+- Change or cancel your AWS Support Plan
+- Register as a seller in the reserved Instance Marketplace
+
+IAM Access Analyzer: identify which resources shared externally
+Firewall Manager: Manage security rules across an organization(WAF, Shield)
 
