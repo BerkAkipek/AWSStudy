@@ -2847,3 +2847,131 @@ Root User Priviliges:
 IAM Access Analyzer: identify which resources shared externally
 Firewall Manager: Manage security rules across an organization(WAF, Shield)
 
+# Machine Learning
+
+## Rekognition
+
+Find objects, people, text, scenes in images and videos using ML.
+Facial analysis and facial search to do user verification, people counting 
+Create a database of familiar faces or compare against celebrities
+Use Cases:
+- Labeling
+- Content Moderation
+- Text Detection
+- Face detection and Analysis(gender, age, emotions, ...)
+- Face search and verification
+- Celebrity Recognition
+- Pathing(ex: for sport game analysis)
+
+## Amazon Transcribe
+
+Automatically converts speech to text 
+Uses a Deep Learning process called Automatic Speech Recognition(ASR) to convert speech to text quickly and accurately
+Automatically remove Personally Identifiable Information(PII) using Redaction
+Supports Automatic Language Identification for multi-lingual audio
+Use Cases:
+- Transcribe costumer service calls
+- Automated closed captioning and subtitles 
+- Generate metadata for media assets to create a fully searchable archive
+
+## Amazon Polly 
+
+Turn text into life-like speech using deep learning
+Allowing you to create applications that can talk
+
+## Amazon Translate
+
+Natural and accurate language translation
+Amazon translate allows you to localize content - such as web sites and applications - for international users easily translate large volumes of text efficiently
+
+## Amazon Lex
+
+Same technology that powers Alexa
+Automatic Speech Recognition(ASR) to convert speech to text 
+Natural Language understanding to recognize the intent of the text, callers
+Helps build chatbots, call center bots
+
+## Amazon Connect
+
+Receive calls, create contact flows, cloud based virtual contact center
+Can integrate with other CRM systems or AWS 
+No upfront payments, %80 cheaper then traditional contact center solutions
+
+## Amazon Comprehend
+
+For Natural Language Processing(NLP)
+Fully managed and serverless service
+Uses ML to find insights and relationships in text:
+- Language of text
+- Extract key phrases, places, people, brands or events
+- Understands how positive or negative the text is
+- Analyzes text using tokenization and parts of speech
+- Automatically organizes a collection of text files by topic
+
+Sample Use Case: 
+- Analyze customer Interactions(e mail) to find what leads to a positive or negative experience
+- Create and group articles by topic that comprehend wil uncover
+
+## Amazon SageMaker
+
+Fully managed service for developers/data scientists to build ML models
+Typically difficult to do all the processes in one place + provision servers
+
+## Amazon Forecast
+
+Fully managed service uses ML to deliver highly accurate foreccasts
+Example: Predict the future sales of a product
+%50 more accurate than looking at the data itself
+Reduce forecasting time from months to hours 
+Use Cases:
+- Product demand planning
+- Financial Planning
+- Resource Planning
+
+## Amazon Kendra
+
+Fully managed document search service powered by ML
+Extract answers from within a document(text, pdf, HTML, PowerPoint, MS Word, ...)
+Natural language search capabilities
+Learn from user interactions/feedback to promote preferred results(Incremental Learning)
+Ability to manually fine-tune search results(importance of data, freshness, custom, ...)
+
+## Amazon Personalize 
+
+Fully managed ML service to build apps with real-time personalized recommendations 
+Use Cases:
+- Personalized Product Recommendations/re-ranking
+- Customized direct marketing
+
+Same technology used by Amazon.com
+Integrates into existing websites, applications, SMS, e-mail marketing systems ...
+Implement in days not months(You don't need to build, train and deploy ML models)
+Example: 
+- Retail Stores
+- Media and Entertainment
+
+## Amazon Textract
+
+Automatically extract text, handwriting and data from any scanned document using AI and ML
+Extract data from forms and tables 
+Read and process any type of document(PDFs, images, ...)
+Use Cases:
+- Financial Services(e.g. invoices, financial reports)
+- Healthcare(e.g. medical records, insurance claims )
+- Publc Sector(e.g. tax forms, ID, passports)
+
+### AWS Machine Learning - Summary
+
+Rekognition: Face detection, labeling, celebrity recognition
+Transcribe: Audio to text(ex: subtitles)
+Polly: Text to Audio
+Translate: Translations
+Lex: Build conversational bots
+Connect: Cloud Contact Center
+Comprehend: Natural Language Processing
+SageMaker: ML for developers and Data Scientists
+Forecast: Build highly accurate forecasts
+Kendra: ML powered document search engine
+Personalize: Real-time personalized recommendations
+Textract: Detect Text and Data in documents
+
