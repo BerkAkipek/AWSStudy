@@ -3356,3 +3356,75 @@ AWS Personal Health Dashboard - A personalized view of the health of AWS service
 
 All basic Support Plan + 
 Business hours email access to Cloud Support Associates 
+Unlimited Cases / 1 primary contact
+Case Severity / Response Times:
+- General Guidance: < 24 business hours
+- System Impaired: < 12 business hours
+
+### AWS Business Support Plan (24x7)
+
+Intended to be used if you have production workloads
+Trusted Advisor - Full Set of Checks and API access
+24x7 phone, email and chat access to Cloud Support Engineers
+Unlimited Cases / Unlimited Contacts
+Access to Infrastructure Event Management for additionasl fee
+Case Severity/Response Times: 
+- General Guidance: < 24 business hours
+- Systems Impaired: < 12 business hours
+- Production System Impaired: < 4 hours
+- Production System Down: < 1 hour
+
+### AWS Enterprise On-Ramp Support Plan (24x7)
+
+Intended to be used if you have production or business critical worklods
+All of the Business Support Plan +
+Access to a pool of Technical Account Managers(TAM)
+Cocierge Support Team(for billing and account best practices)
+Infrastructure Event Management, Well-Architected and Operations Reviews
+Case Severity / Response Times:
+- ...
+- Production System Impaired: < 4 hours
+- Production System Down: < 1 hour
+- Business Critical system down: < 30 minutes
+
+### AWS ENterprise Support Plan(24x7)
+
+Intended to be used if you have mission critical workloads
+All of the business Support Plan +
+Access to a designated Technical Account Manager(TAM)
+Concierge Support Team(for billing and account best practices)
+Infrastructure Event Manager, Weel-Architected and Operations Team
+Case Severity / Response Times:
+- ...
+- Production System Impaired: < 4 hours
+- Production System Down: < 1 hour
+- Business Critical system down: < 15 minutes
+
+## Account Best Practices - Summary
+
+Operate multiple accounts using Organizations
+Use SCP(Service Control Policy) to restrict account power
+Easily setup multiple accounts with best practices with AWS Control Tower
+Use Tags and Cost Allocation Tags for easy management and billing
+IAM guidelines: MFA, Least-privilige, password policy, password rotation
+AWS Config: To record all resources configurations and compliance over time 
+CloudFormation: to deploy stacks across accounts and regions
+Trusted Advisor: To get insights, Support Plan adopted to your needs 
+Send service logs and access logs to S3 or CloudWatch Logs
+CloudTrail to record API calls made within your account 
+If your account compromised: change the root password, delete and rotate all passwords/keys, contact AWS Support
+Allow users to create pre-defined stacks defined by admins using AWS Service Catalog
+
+## Billing and Costing Tools - Summary
+
+Compute Optimizer: Recommends Resources configurations to reduce costs
+Pricing Calculator: Calculate cost of services in AWS 
+Billing Dashboard: High-level overview + Free Tier Dashboards
+Cost Allocation Tags: Tag resources to create detailed reports 
+Cost and Usage Reports: Most comprehensive billing dataset
+Cost Explorer: View current usage (detailed) and forecast usage
+Billinmg Alarms: in us-east-1 track overall and per-servicve usage
+Budgets: more advanced - track usage, costs, RI, and get alerts.
+Savings Plans: Easy way to save based on long-term usage of AWS
+Cost Anomaly Detection: Detect unusual spends using ML
+Service Quotas: Notify you when you're close to a service quota Threshold
