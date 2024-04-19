@@ -3428,3 +3428,4 @@ Budgets: more advanced - track usage, costs, RI, and get alerts.
 Savings Plans: Easy way to save based on long-term usage of AWS
 Cost Anomaly Detection: Detect unusual spends using ML
 Service Quotas: Notify you when you're close to a service quota Threshold
+
