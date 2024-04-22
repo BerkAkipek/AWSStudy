@@ -3429,3 +3429,64 @@ Savings Plans: Easy way to save based on long-term usage of AWS
 Cost Anomaly Detection: Detect unusual spends using ML
 Service Quotas: Notify you when you're close to a service quota Threshold
 
+# Advanced Identity
+
+## AWS STS(Security Token Service)
+
+Enables you to create temporary, limited-priviliges credentials to access your AWS resources
+Short-Term credentials: You configure expiration period
+Use Cases:
+- Identity Federation: Manage our identities in external systems and provide them with STS tokens to access AWS resources
+- IAM roles for cross/same account access 
+- IAM roles for Amazon EC2: provide temporary credentials for EC2 instances to access AWS resources 
+
+## AWS Cognito
+
+Identify for your web and mobile application Users(Potentially Millions)
+Istead of creating an IAM user for them, you create a user in incognito
+
+### What is Microsoft Active Directory(AD)?
+
+Found on any Windows Server with AD Domain Services
+Database of objects: User Accounts, Computers, Printers, File Shares, Security Groups
+Centralized Security Management, Create Accounts, Assign Permissions
+
+## AWS Directory Services
+
+AWS Managed Microsoft AD:
+- Create your own Active Directory in AWS, manage users locally, supports MFA
+- Establish trust connections with your on-premises AD
+
+AD Connector:
+- Directory Gateway(Proxy) to redirect on-premises AD, supports MFA
+- Users are managed on on-premises AD
+
+Simple AD:
+- AD-compoatible managed Directory in AWS
+- Cannot be joined wit on-premises AD
+
+## AWS IAM Identity Center
+
+It's successor to AWS single sign-on
+One Login(Single Sign-on) for all your:
+- AWS Accounts in AWS Organization
+- Business Cloud Applications(ex: SalesForce, Box, Microsoft 365, ...)
+- SAML 2.0 - enabled applications
+- EC2 Windows Instances 
+
+Idetity Providers:
+- Build in identity store in IAM Identity Center 
+- 3rd Party: Active Directory(AD), One Login, Okta, ...
+
+## Advanced Identity - Summary
+
+IAM:
+- Identity and Access Management inside in your AWS Account
+- For users that you trust and belong to your company 
+
+Organiztions: Manage Multiple accounts
+Security Token Service(STS): Temporary limited-priviliges credentials to access AWS resources
+Cognito: Create a database of users for your mobile and web application
+Directory Services: Integrate Microsoft Active Directory in AWS
+IAM Identity Center: One login for multiple AWS accounts and applicaitons
+
